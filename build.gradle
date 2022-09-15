@@ -16,7 +16,7 @@ dependencies {
 apply plugin: "maven-publish"
 apply plugin: BuildPlugin
 
-publishToMavenLocal.dependsOn build
+publishToMavenLocal.dependsOn assemble
 
 publishing {
     publications {

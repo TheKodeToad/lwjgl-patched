@@ -7,7 +7,7 @@ public class BuildPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
-		project.getTasks().register("build", PatchTask.class);
+		project.getTasks().register("build").get().dependsOn(project.getTasks().register("assemble").get().dependsOn(project.getTasks().register("patch", PatchTask.class)));
 	}
 
 }
