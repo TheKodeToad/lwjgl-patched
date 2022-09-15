@@ -76,17 +76,25 @@ public class PatchTask extends DefaultTask {
 
 					@Override
 					public String map(String internalName) {
-						return internalName.replace("lwjgl", "lwjgl3");
+						return replace(internalName);
 					}
 
 				}));
 				ClassWriter writer = new ClassWriter(0);
 				clazz.accept(writer);
 				data = writer.toByteArray();
-				out.putNextEntry(new ZipEntry(entry.getName().replace("lwjgl", "lwjgl3")));
+				out.putNextEntry(new ZipEntry(replace(entry.getName().substring(0, entry.getName().lastIndexOf('.'))) + ".class"));
 				out.write(data);
 			}
 		}
+	}
+
+	private static String replace(String string) {
+		if(string.equals("org/lwjgl/BufferUtils")
+				|| string.equals("org/lwjgl/PointerBuffer")) {
+			return string.replace("lwjgl", "lwjgl3");
+		}
+		return string;
 	}
 
 	private static File getDependency(Set<File> deps, String prefix) { // quick-n-dirty
