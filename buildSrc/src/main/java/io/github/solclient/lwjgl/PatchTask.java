@@ -1,5 +1,16 @@
 package io.github.solclient.lwjgl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
@@ -9,18 +20,6 @@ import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.ClassNode;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
-
 public class PatchTask extends DefaultTask {
 
 	private final File outputFile;
@@ -28,9 +27,10 @@ public class PatchTask extends DefaultTask {
 	private final File stbFile;
 
 	public PatchTask() {
-		outputFile = new File(getProject().getBuildDir(), "lwjgl-patched-all.jar");
-		coreFile = new File(getProject().getBuildDir(), "lwjgl-core.jar");
-		stbFile = new File(getProject().getBuildDir(), "lwjgl-stb.jar");
+		File libs = new File(getProject().getBuildDir(), "libs");
+		outputFile = new File(libs, "lwjgl-patched-all.jar");
+		coreFile = new File(libs, "lwjgl-core.jar");
+		stbFile = new File(libs, "lwjgl-stb.jar");
 	}
 
 	private static void combine(File outputFile, File... files) throws IOException {
