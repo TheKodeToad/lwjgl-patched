@@ -70,19 +70,15 @@ public class PatchTask extends DefaultTask {
 				byte[] data = IOUtils.toByteArray(entryIn);
 				entryIn.close();
 				ClassReader reader = new ClassReader(data);
-				ClassNode clazz = new ClassNode();
-				reader.accept(clazz, 0);
-				clazz.accept(new ClassRemapper(clazz, new Remapper() {
+				ClassWriter writer = new ClassWriter(0);
+				reader.accept(new ClassRemapper(writer, new Remapper() {
 
 					@Override
 					public String map(String internalName) {
 						return replace(internalName);
 					}
 
-				}));
-				ClassWriter writer = new ClassWriter(0);
-				clazz.accept(writer);
-				data = writer.toByteArray();
+				}), 0);
 				out.putNextEntry(new ZipEntry(replace(entry.getName().substring(0, entry.getName().lastIndexOf('.'))) + ".class"));
 				out.write(data);
 			}
