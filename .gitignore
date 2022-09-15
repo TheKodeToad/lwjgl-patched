@@ -4,9 +4,11 @@
 # Ignore Gradle build output directory
 build
 
-.idea
+# Ignore IDE files
 
-# support for buildSrc can be shaky with Eclipse
+.idea
 .classpath
 .project
 .settings/
+bin/
+buildSrc/bin/
