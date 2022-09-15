@@ -13,4 +13,16 @@ dependencies {
     lwjgl "org.lwjgl:lwjgl-stb:3.3.1"
 }
 
+apply plugin: "maven-publish"
 apply plugin: BuildPlugin
+
+publishToMavenLocal.dependsOn build
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId "io.github.solclient.lwjgl"
+            artifact "build/libs/lwjgl-patched-all.jar"
+        }
+    }
+}
