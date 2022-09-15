@@ -1,0 +1,16 @@
+import io.github.solclient.lwjgl.BuildPlugin
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    lwjgl
+}
+
+dependencies {
+    lwjgl "org.lwjgl:lwjgl:3.3.1"
+    lwjgl "org.lwjgl:lwjgl-stb:3.3.1"
+}
+
+apply plugin: BuildPlugin
