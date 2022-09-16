@@ -62,6 +62,9 @@ public class PatchTask extends DefaultTask {
 	private static void process(File inFile, File outFile) throws IOException {
 		try(ZipFile in = new ZipFile(inFile); ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFile))) {
 			for(ZipEntry entry : Collections.list(in.entries())) {
+				if(entry.isDirectory()) {
+					continue;
+				}
 				// just like with the old mods
 				if(entry.getName().startsWith("META-INF/")) {
 					continue;
