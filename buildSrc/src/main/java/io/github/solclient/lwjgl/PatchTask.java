@@ -62,32 +62,41 @@ public class PatchTask extends DefaultTask {
 	private static void process(File inFile, File outFile) throws IOException {
 		try(ZipFile in = new ZipFile(inFile); ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFile))) {
 			for(ZipEntry entry : Collections.list(in.entries())) {
-				if(!entry.getName().endsWith(".class")) {
+				// just like with the old mods
+				if(entry.getName().startsWith("META-INF/")) {
 					continue;
 				}
 
 				InputStream entryIn = in.getInputStream(entry);
-				byte[] data = IOUtils.toByteArray(entryIn);
+				if(entry.getName().endsWith(".class")) {
+					byte[] data = IOUtils.toByteArray(entryIn);
+					ClassReader reader = new ClassReader(data);
+					ClassWriter writer = new ClassWriter(0);
+
+					reader.accept(new ClassRemapper(writer, new Remapper() {
+
+						@Override
+						public String map(String internalName) {
+							return replace(internalName);
+						}
+
+					}), 0);
+					data = writer.toByteArray();
+					out.putNextEntry(new ZipEntry(replace(entry.getName().substring(0, entry.getName().lastIndexOf('.'))) + ".class"));
+					out.write(data);
+				}
+				else {
+					out.putNextEntry(new ZipEntry(entry.getName()));
+					IOUtils.copy(entryIn, out);
+				}
 				entryIn.close();
-				ClassReader reader = new ClassReader(data);
-				ClassWriter writer = new ClassWriter(0);
-				reader.accept(new ClassRemapper(writer, new Remapper() {
-
-					@Override
-					public String map(String internalName) {
-						return replace(internalName);
-					}
-
-				}), 0);
-				out.putNextEntry(new ZipEntry(replace(entry.getName().substring(0, entry.getName().lastIndexOf('.'))) + ".class"));
-				out.write(data);
 			}
 		}
 	}
 
 	private static String replace(String string) {
-		if(string.equals("org/lwjgl/BufferUtils")
-				|| string.equals("org/lwjgl/PointerBuffer")) {
+		if(string.endsWith("org/lwjgl/BufferUtils")
+				|| string.endsWith("org/lwjgl/PointerBuffer")) {
 			return string.replace("lwjgl", "lwjgl3");
 		}
 		return string;
