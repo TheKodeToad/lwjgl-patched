@@ -1,4 +1,4 @@
-import io.github.solclient.lwjgl.BuildPlugin
+import io.toadlabs.lwjgl.BuildPlugin
 
 repositories {
 	mavenCentral()
@@ -9,12 +9,12 @@ configurations {
 }
 
 dependencies {
-	lwjgl "org.lwjgl:lwjgl:3.3.1"
-	lwjgl "org.lwjgl:lwjgl-stb:3.3.1"
-	lwjgl "org.lwjgl:lwjgl-nanovg:3.3.1"
+	lwjgl 'org.lwjgl:lwjgl:3.3.1'
+	lwjgl 'org.lwjgl:lwjgl-stb:3.3.1'
+	lwjgl 'org.lwjgl:lwjgl-nanovg:3.3.1'
 }
 
-apply plugin: "maven-publish"
+apply plugin: 'maven-publish'
 apply plugin: BuildPlugin
 
 publishToMavenLocal.dependsOn assemble
@@ -22,8 +22,8 @@ publishToMavenLocal.dependsOn assemble
 publishing {
 	publications {
 		maven(MavenPublication) {
-			groupId "io.github.solclient.lwjgl"
-			artifact "build/libs/lwjgl-patched-all.jar"
+			groupId 'io.toadlabs.lwjgl'
+			artifact 'build/libs/lwjgl-patched-all.jar'
 		}
 	}
 }

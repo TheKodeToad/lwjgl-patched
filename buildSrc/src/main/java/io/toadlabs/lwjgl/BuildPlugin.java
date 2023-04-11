@@ -1,8 +1,8 @@
-package io.github.solclient.lwjgl;
+package io.toadlabs.lwjgl;
 
 import org.gradle.api.*;
 
-public class BuildPlugin implements Plugin<Project> {
+public final class BuildPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
