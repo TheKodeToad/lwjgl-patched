@@ -10,7 +10,7 @@ import org.gradle.api.tasks.TaskAction;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.*;
 
-public final class PatchTask extends DefaultTask {
+public class PatchTask extends DefaultTask {
 
 	private final File outputFile;
 	private final File coreFile;
